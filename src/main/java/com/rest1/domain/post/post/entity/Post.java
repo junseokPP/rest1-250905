@@ -58,13 +58,5 @@ public class Post extends BaseEntity {
                 .findFirst();
     }
 
-    public PostDto toDto() {
-        return new PostDto(
-                this.getId(),
-                this.getCreateDate(),
-                this.getModifyDate(),
-                this.getTitle(),
-                this.getContent()
-        );
-    }
+
 }

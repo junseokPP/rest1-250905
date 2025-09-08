@@ -26,7 +26,7 @@ public class ApiV1PostController {
     @Transactional(readOnly = true)
     public List<PostDto> list() {
         return postService.findAll().stream()
-                .map(Post::toDto)
+                .map(post -> new PostDto(post))
                 .toList();
     }
 }
