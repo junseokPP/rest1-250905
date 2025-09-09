@@ -50,7 +50,7 @@ public class ApiV1PostController {
         postService.delete(post);
 
         return new RsData<Void>(
-                "204-1",
+                "200-1",
                 "%d번 게시물이 삭제되었습니다.".formatted(id)
         );
     }
@@ -74,13 +74,13 @@ public class ApiV1PostController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<RsData<PostWriteResBody>> createItem(
+    public RsData<PostWriteResBody> createItem(
             @RequestBody @Valid PostWriteReqBody reqBody
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
         long totalCount = postService.count();
 
-        RsData<PostWriteResBody> rsData = new RsData<>(
+        return new RsData<>(
                 "201-1",
                 "%d번 게시물이 생성되었습니다.".formatted(post.getId()),
                 new PostWriteResBody(
@@ -89,6 +89,5 @@ public class ApiV1PostController {
                 )
         );
 
-        return ResponseEntity.status(201).body(rsData);
     }
 }
