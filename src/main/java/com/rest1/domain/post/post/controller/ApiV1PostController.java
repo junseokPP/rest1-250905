@@ -37,7 +37,7 @@ public class ApiV1PostController {
     @Transactional(readOnly = true)
     public PostDto getItem(
             @PathVariable Long id
-    ){
+    ) {
         Post post = postService.findById(id).get();
         return new PostDto(post);
     }
@@ -45,7 +45,7 @@ public class ApiV1PostController {
     @DeleteMapping("/{id}")
     public RsData<Void> deleteItem(
             @PathVariable Long id
-    ){
+    ) {
         Post post = postService.findById(id).get();
         postService.delete(post);
 
@@ -63,29 +63,32 @@ public class ApiV1PostController {
             @NotBlank
             @Size(min = 2, max = 100)
             String content
-    ){}
+    ) {
+    }
 
     record PostWriteResBody(
             PostDto postDto,
             long totalCount
-    ){}
+    ) {
+    }
 
     @PostMapping
     @Transactional
-    public RsData<PostWriteResBody> createItem(
+    public ResponseEntity<RsData<PostWriteResBody>> createItem(
             @RequestBody @Valid PostWriteReqBody reqBody
     ) {
-
         Post post = postService.write(reqBody.title, reqBody.content);
-        long totalcount = postService.count();
+        long totalCount = postService.count();
 
-        return new RsData<>(
+        RsData<PostWriteResBody> rsData = new RsData<>(
                 "201-1",
                 "%d번 게시물이 생성되었습니다.".formatted(post.getId()),
                 new PostWriteResBody(
                         new PostDto(post),
-                        totalcount
+                        totalCount
                 )
         );
+
+        return ResponseEntity.status(201).body(rsData);
     }
 }
