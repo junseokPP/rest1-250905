@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                 .map(error -> (FieldError) error)
                 .map(error -> error.getField() + "-" + error.getCode() + "-" + error.getDefaultMessage())
                 .sorted(Comparator.comparing(String::toString))
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining("\n"));
 
         return new RsData<Void>(
                 "400-1",
