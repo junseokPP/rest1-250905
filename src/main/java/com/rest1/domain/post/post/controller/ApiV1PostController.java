@@ -1,6 +1,5 @@
 package com.rest1.domain.post.post.controller;
 
-import com.rest1.domain.post.comment.entity.Comment;
 import com.rest1.domain.post.post.dto.PostDto;
 import com.rest1.domain.post.post.entity.Post;
 import com.rest1.domain.post.post.service.PostService;
@@ -9,11 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +20,15 @@ public class ApiV1PostController {
 
     private final PostService postService;
 
+
     @GetMapping
     @Transactional(readOnly = true)
     public List<PostDto> getItems() {
-        return postService.findAll().stream()
-                .map(post -> new PostDto(post))
+        return postService.findAll().reversed().stream()
+                .map(PostDto::new)
                 .toList();
     }
+
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
@@ -41,6 +38,7 @@ public class ApiV1PostController {
         Post post = postService.findById(id).get();
         return new PostDto(post);
     }
+
 
     @DeleteMapping("/{id}")
     public RsData<Void> deleteItem(
@@ -54,6 +52,7 @@ public class ApiV1PostController {
                 "%d번 게시물이 삭제되었습니다.".formatted(id)
         );
     }
+
 
     record PostWriteReqBody(
             @NotBlank
@@ -69,8 +68,7 @@ public class ApiV1PostController {
     record PostWriteResBody(
             PostDto postDto,
             long totalCount
-    ) {
-    }
+    ) {}
 
     @PostMapping
     @Transactional
@@ -79,6 +77,8 @@ public class ApiV1PostController {
     ) {
         Post post = postService.write(reqBody.title, reqBody.content);
         long totalCount = postService.count();
+
+        System.out.println("createItem 메서드 실행");
 
         return new RsData<>(
                 "201-1",
@@ -89,6 +89,7 @@ public class ApiV1PostController {
                 )
         );
     }
+
 
     record PostModifyReqBody(
             @NotBlank
@@ -106,9 +107,9 @@ public class ApiV1PostController {
     public RsData<Void> modifyItem(
             @PathVariable Long id,
             @RequestBody @Valid PostModifyReqBody reqBody
-    ){
+    ) {
         Post post = postService.findById(id).get();
-        postService.modify(post, reqBody.title,  reqBody.content);
+        postService.modify(post, reqBody.title, reqBody.content);
 
         return new RsData(
                 "200-1",
