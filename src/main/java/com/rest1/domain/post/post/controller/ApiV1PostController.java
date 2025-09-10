@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class ApiV1PostController {
     public PostDto getItem(
             @PathVariable Long id
     ) {
-        Post post = postService.findById(id).get();
-        return new PostDto(post);
+            Post post = postService.findById(id).get();
+            return new PostDto(post);
     }
 
 
