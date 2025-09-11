@@ -1,6 +1,3 @@
 spring:
   datasource:
     url: jdbc:h2:mem:db_dev;MODE=MySQL
-  test:
-    mockmvc:
-      print: system_out
