@@ -21,7 +21,7 @@ public class HomeController {
                 <div>
                     <a href="swagger-ui/index.html">API 문서로 이동</a>
                 </div>
-                """.formatted(localhost.getAddress(), localhost.getHostName());
+                """.formatted(localhost.getHostAddress(), localhost.getHostName());
     }
 
 }
